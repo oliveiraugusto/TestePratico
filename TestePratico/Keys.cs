@@ -9,6 +9,6 @@ namespace TestePratico
 {
     public static class Keys
     {
-        public static string ConnectionString { get; } = "Data Source=(LocalDB)\\MSSQLLocalDB;Initial Catalog=master;Integrated Security=True";
+        public static string ConnectionString { get; } = "Data Source=(LocalDB)\\MSSQLLocalDB;Initial Catalog=testepratico;Integrated Security=True";
     }
 }

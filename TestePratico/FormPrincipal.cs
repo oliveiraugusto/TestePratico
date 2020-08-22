@@ -5,15 +5,24 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using TestePratico.Classes;
 
 namespace TestePratico
 {
     public partial class FormPrincipal : Form
-    {
-       
+    {       
         public FormPrincipal()
         {
             InitializeComponent();
+        }
+
+        private void FormPrincipal_Load(object sender, EventArgs e)
+        {
+            var c = new DbContext();
+            var initialContext = c.InitialContext();
+            textBoxDistanciaTotal.Text = initialContext.Rows[0][2].ToString();
+            textBoxDistanciaEntrePilares.Text = initialContext.Rows[0][3].ToString();
+            textBoxDistanciaBaseReforcada.Text = initialContext.Rows[0][4].ToString();
         }
 
         private void textBoxDiametroTotal_KeyPress(object sender, KeyPressEventArgs e)
@@ -50,32 +59,40 @@ namespace TestePratico
                 double distanciaPilares = Convert.ToDouble(textBoxDistanciaEntrePilares.Text);
                 double distanciaBaseReforcada = Convert.ToDouble(textBoxDistanciaBaseReforcada.Text);
 
-                IntPtr ptr = Program.GetConsoleWindow();
-                
-                if(ptr !=  IntPtr.Zero)
+                try
                 {
-                    Program.ShowWindow(ptr, 1);// show console
-                    Console.Clear();
-                    Console.WriteLine($"Realizando calculos");
+                    var p = new DbContext();
+                    bool resultado = p.Update(distanciaTotal, distanciaPilares, distanciaBaseReforcada);
 
-                    
-                    
-                    
-                    Console.WriteLine($"{i} pilares\n\n(pressione qualquer tecla para continuar)");
-                    Console.ReadKey();
+                    IntPtr ptr = Program.GetConsoleWindow();
 
-                    Program.ShowWindow(ptr, 0);  //hide console
+                    if (ptr != IntPtr.Zero)
+                    {
+                        Program.ShowWindow(ptr, 1);// show console
+                        Console.Clear();
+                        Console.WriteLine($"Realizando calculos");
 
-                    labelResultado.Text = String.Empty;  //limpa caso haja texto
-                    labelResultado.Text = $"{i} pilares";
+                        var c = new Calculos();
+                        var dados = c.CalcularPilar(distanciaTotal, distanciaPilares, distanciaBaseReforcada);
+
+                        Console.WriteLine($"Calculos realizados com sucesso!\n\n(pressione qualquer tecla para continuar)");
+                        Console.ReadKey();
+
+                        Program.ShowWindow(ptr, 0);  //hide console
+
+                        labelResultado.Text = String.Empty;  //limpa caso haja texto
+                        labelResultado.Text = $"{dados[0]} pilares";
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Houve um erro\nDetalhes:\n{ex.Message}", "Erro | Configurações Necessarias", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }     
             else
             {
                 MessageBox.Show("Não deixe os campos em branco");
-            }
-
-            
+            }            
         }
     }
 }

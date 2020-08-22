@@ -36,6 +36,8 @@
             this.textBoxDistanciaBaseReforcada = new System.Windows.Forms.TextBox();
             this.buttonCalcular = new System.Windows.Forms.Button();
             this.labelResultado = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // textBoxDistanciaTotal
@@ -118,12 +120,34 @@
             this.labelResultado.Size = new System.Drawing.Size(0, 24);
             this.labelResultado.TabIndex = 6;
             // 
+            // button1
+            // 
+            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button1.Location = new System.Drawing.Point(27, 318);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(116, 59);
+            this.button1.TabIndex = 7;
+            this.button1.Text = "10 ULTIMOS REGISTROS";
+            this.button1.UseVisualStyleBackColor = true;
+            // 
+            // button2
+            // 
+            this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button2.Location = new System.Drawing.Point(187, 318);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(116, 59);
+            this.button2.TabIndex = 8;
+            this.button2.Text = "TODOS DOS REGISTROS";
+            this.button2.UseVisualStyleBackColor = true;
+            // 
             // FormPrincipal
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.ClientSize = new System.Drawing.Size(345, 557);
+            this.Controls.Add(this.button2);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.labelResultado);
             this.Controls.Add(this.buttonCalcular);
             this.Controls.Add(this.label3);
@@ -137,6 +161,7 @@
             this.Name = "FormPrincipal";
             this.ShowIcon = false;
             this.Text = "Inicio | Teste Pratico C#";
+            this.Load += new System.EventHandler(this.FormPrincipal_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -152,6 +177,8 @@
         private System.Windows.Forms.TextBox textBoxDistanciaBaseReforcada;
         private System.Windows.Forms.Button buttonCalcular;
         private System.Windows.Forms.Label labelResultado;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button button2;
     }
 }
 
