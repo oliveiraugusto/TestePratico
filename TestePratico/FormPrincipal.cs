@@ -18,6 +18,11 @@ namespace TestePratico
 
         private void FormPrincipal_Load(object sender, EventArgs e)
         {
+            AtualizaTextBoxes();
+        }
+
+        private void AtualizaTextBoxes()
+        {
             var c = new DbContext();
             var initialContext = c.InitialContext();
             textBoxDistanciaTotal.Text = initialContext.Rows[0][2].ToString();
@@ -51,48 +56,57 @@ namespace TestePratico
 
         private void buttonCalcular_Click(object sender, EventArgs e)
         {
-            if(!string.IsNullOrEmpty(textBoxDistanciaTotal.Text) ||
-               !string.IsNullOrEmpty(textBoxDistanciaTotal.Text) ||
-               !string.IsNullOrEmpty(textBoxDistanciaTotal.Text))
+            if (Convert.ToDouble(textBoxDistanciaTotal.Text) < 2 ||
+                Convert.ToDouble(textBoxDistanciaEntrePilares.Text) < 2 ||
+                Convert.ToDouble(textBoxDistanciaBaseReforcada.Text) < 2)
             {
-                double distanciaTotal = Convert.ToDouble(textBoxDistanciaTotal.Text);
-                double distanciaPilares = Convert.ToDouble(textBoxDistanciaEntrePilares.Text);
-                double distanciaBaseReforcada = Convert.ToDouble(textBoxDistanciaBaseReforcada.Text);
+                MessageBox.Show("O valor tem que ser maior do que 2", "Aviso | Configurações Minimas", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else if (!string.IsNullOrEmpty(textBoxDistanciaTotal.Text) ||
+                    !string.IsNullOrEmpty(textBoxDistanciaEntrePilares.Text) ||
+                    !string.IsNullOrEmpty(textBoxDistanciaBaseReforcada.Text))
+                { 
+                    double distanciaTotal = Convert.ToDouble(textBoxDistanciaTotal.Text);
+                    double distanciaPilares = Convert.ToDouble(textBoxDistanciaEntrePilares.Text);
+                    double distanciaBaseReforcada = Convert.ToDouble(textBoxDistanciaBaseReforcada.Text);
 
-                try
-                {
-                    var p = new DbContext();
-                    bool resultado = p.Update(distanciaTotal, distanciaPilares, distanciaBaseReforcada);
-
-                    IntPtr ptr = Program.GetConsoleWindow();
-
-                    if (ptr != IntPtr.Zero)
+                    try
                     {
-                        Program.ShowWindow(ptr, 1);// show console
-                        Console.Clear();
-                        Console.WriteLine($"Realizando calculos");
+                        
 
-                        var c = new Calculos();
-                        var dados = c.CalcularPilar(distanciaTotal, distanciaPilares, distanciaBaseReforcada);
+                        IntPtr ptr = Program.GetConsoleWindow();
 
-                        Console.WriteLine($"Calculos realizados com sucesso!\n\n(pressione qualquer tecla para continuar)");
-                        Console.ReadKey();
+                        if (ptr != IntPtr.Zero)
+                        {
+                            Program.ShowWindow(ptr, 1);// show console
+                            Console.Clear();
+                            Console.WriteLine($"Realizando calculos");
 
-                        Program.ShowWindow(ptr, 0);  //hide console
+                            var c = new Calculos();
+                            var dados = c.CalcularPilar(distanciaTotal, distanciaPilares, distanciaBaseReforcada);
 
-                        labelResultado.Text = String.Empty;  //limpa caso haja texto
-                        labelResultado.Text = $"{dados[0]} pilares";
+                            var p = new DbContext();
+                            bool result = p.Insert(distanciaTotal, distanciaPilares, distanciaBaseReforcada, dados[0], dados[1]);
+
+                            Console.WriteLine($"Calculos realizados com sucesso!\n\n(pressione qualquer tecla para continuar)");
+                            Console.ReadKey();
+
+                            Program.ShowWindow(ptr, 0);  //hide console
+
+                            labelResultado.Text = String.Empty;  //limpa caso haja texto
+                            labelResultado.Text = $"{dados[0]} pilares\n{dados[1]} pilares reforçados";
+                           
+                        }
                     }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Houve um erro\nDetalhes:\n{ex.Message}", "Erro | Configurações Necessarias", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }     
-            else
-            {
-                MessageBox.Show("Não deixe os campos em branco");
-            }            
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Houve um erro\nDetalhes:\n{ex.Message}", "Erro | Configurações Necessarias", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                 }     
+                 else
+                 {
+                    MessageBox.Show("Não deixe os campos em branco", "Aviso | Configurações Necessarias", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                 }            
         }
     }
 }

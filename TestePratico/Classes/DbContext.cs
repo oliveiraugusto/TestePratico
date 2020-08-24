@@ -91,39 +91,33 @@ namespace TestePratico.Classes
             }
         }
 
-        /// <summary>
-        /// Insere os calculos usados para realizar o calculo
-        /// </summary>
-        /// <param name="distanciatotal"></param>
-        /// <param name="distanciapilares"></param>
-        /// <param name="basereforcada"></param>
-        /// <returns>true caso os dados forem gravados no banco, false c.c.</returns>
-        public bool Update(double distanciatotal, double distanciapilares, double basereforcada)
+        public bool Insert(double distanciatotal, double distanciapilares, double basereforcada, int resultadopilares, int resultadopilaresreforcados)
         {
             try
-            {
-                string sql = "";
+            { //calculosrealizados
+                string sql = "INSERT INTO calculosrealizados (data, distanciatotal, distanciapilares, basereforcada, resultadopilares, resultadopilaresreforcados) " +
+                                "VALUES  (@data, @distanciatotal, @distanciapilares, @basereforcada, @resultadopilares, @resultadopilaresreforcados)";
 
                 var cmd = new SqlCommand(sql, Connection);
-
-                cmd.Parameters.Add("@distanciatotal", SqlDbType.Float);
-                cmd.Parameters["@distanciatotal"].Value = distanciatotal;
-
-                cmd.Parameters.Add("@distanciapilares", SqlDbType.Float);
-                cmd.Parameters["@distanciapilares"].Value = distanciapilares;
-
-                cmd.Parameters.Add("@basereforcada", SqlDbType.Float);
-                cmd.Parameters["@basereforcada"].Value = basereforcada;
+                cmd.Parameters.AddWithValue("@data", DateTime.Now.ToString());
+                cmd.Parameters.AddWithValue("@distanciatotal", distanciatotal.ToString());
+                cmd.Parameters.AddWithValue("@distanciapilares", distanciapilares.ToString());
+                cmd.Parameters.AddWithValue("@basereforcada", basereforcada.ToString());
+                cmd.Parameters.AddWithValue("@resultadopilares", resultadopilares.ToString());
+                cmd.Parameters.AddWithValue("@resultadopilaresreforcados", resultadopilaresreforcados.ToString());
 
                 Connection.Open();
-                var result = cmd.ExecuteNonQuery();
-
-                if (result == 1)
+                int result = cmd.ExecuteNonQuery();
+                if(result == 1)
+                {
                     return true;
+                }
                 else
+                {
                     return false;
+                }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw ex;
             }
